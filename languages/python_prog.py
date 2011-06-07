@@ -2,21 +2,25 @@
 def escape(s):
     return s.replace("\\", "\\\\").replace("\n", "\\n").replace('"', '\\"')
 
-def print_c_list(name, l):
-    print "char* %s[] = {" % name
+def format_c_list(name, l):
+    output = ""
+    output += "char* %s[] = {\n" % name
     for line in l:
-        print '    "%s",' % escape(line)
-    print "};"
+        output += '    "%s",\n' % escape(line)
+    output += "};\n"
+    return output
 
-def print_python_list(name, l):
-    print '%s = [' % name
+def format_python_list(name, l):
+    output = ""
+    output += '%s = [\n' % name
     for line in l:
-        print '    "%s",' % escape(line)
-    print "]"
+        output += '    "%s",\n' % escape(line)
+    output += "]\n"
+    return output
 
-LANGUAGE_LIST_PRINT_FUNCS = {
-    "python": print_python_list,
-    "c": print_c_list,
+LANGUAGE_LIST_FORMAT_FUNCS = {
+    "python": format_python_list,
+    "c": format_c_list,
 }
 
 def print_list(l):
@@ -26,12 +30,12 @@ def print_list(l):
 if __name__ == "__main__":
 
     # Print program lists
-    next_lang_func = LANGUAGE_LIST_PRINT_FUNCS[languages[0]]
-    next_lang_func("python_prog", python_prog)
-    next_lang_func("c_prog", c_prog)
+    next_lang_format_func = LANGUAGE_LIST_FORMAT_FUNCS[languages[0]]
+    print next_lang_format_func("python_prog", python_prog)
+    print next_lang_format_func("c_prog", c_prog)
 
     # Rotate and print language array
-    next_lang_func("languages", languages[1:] + [languages[0]])
+    print next_lang_format_func("languages", languages[1:] + [languages[0]])
 
     # Print the actual program
     if languages[0] == "python":
