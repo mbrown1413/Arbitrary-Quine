@@ -11,13 +11,11 @@ LANGUAGE_TEMPLATES = {
     "c": "languages/c_prog.c",
 }
 
-def remove_ending_newlines(str):
-    if str.endswith("\n"):
-        return str[:-1]
-    else:
-        return str
-
 def generate_multiquine(languages):
+
+    for language in languages:
+        if language not in LANGUAGE_TEMPLATES.keys():
+            raise ValueError('Language "%s" not one of the available languages: %s' % (language, LANGUAGE_TEMPLATES.keys()))
 
     quine = ''
     first_lang = languages[0]
@@ -26,7 +24,7 @@ def generate_multiquine(languages):
     # Print program lists
     for lang in LANGUAGE_TEMPLATES.keys():
         lang_file = open(LANGUAGE_TEMPLATES[lang], 'r')
-        lines = [remove_ending_newlines(line) for line in lang_file.readlines()]
+        lines = [line.rstrip("\n") for line in lang_file.readlines()]
         quine += list_format_func("%s_prog" % lang, lines)
         lang_file.close()
 

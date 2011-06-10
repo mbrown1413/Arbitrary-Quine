@@ -3,16 +3,14 @@ def escape(s):
     return s.replace("\\", "\\\\").replace("\n", "\\n").replace('"', '\\"')
 
 def format_c_list(name, l):
-    output = ""
-    output += "char* %s[] = {\n" % name
+    output = "char* %s[] = {\n" % name
     for line in l:
         output += '    "%s",\n' % escape(line)
     output += "};\n"
     return output
 
 def format_python_list(name, l):
-    output = ""
-    output += '%s = [\n' % name
+    output = '%s = [\n' % name
     for line in l:
         output += '    "%s",\n' % escape(line)
     output += "]\n"
@@ -31,11 +29,11 @@ if __name__ == "__main__":
 
     # Print program lists
     next_lang_format_func = LANGUAGE_LIST_FORMAT_FUNCS[languages[0]]
-    print next_lang_format_func("python_prog", python_prog)
-    print next_lang_format_func("c_prog", c_prog)
+    print next_lang_format_func("python_prog", python_prog),
+    print next_lang_format_func("c_prog", c_prog),
 
     # Rotate and print language array
-    print next_lang_format_func("languages", languages[1:] + [languages[0]])
+    print next_lang_format_func("languages", languages[1:] + [languages[0]]),
 
     # Print the actual program
     if languages[0] == "python":
