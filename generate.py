@@ -4,7 +4,7 @@ import os
 
 # We will use the list formatting functions straight from the python program
 sys.path.append(os.path.abspath("languages"))
-from python_prog import LANGUAGE_LIST_FORMAT_FUNCS
+import python_prog
 
 LANGUAGE_TEMPLATES = {
     "python": "languages/python_prog.py",
@@ -19,17 +19,18 @@ def generate_multiquine(languages):
 
     quine = ''
     first_lang = languages[0]
-    list_format_func = LANGUAGE_LIST_FORMAT_FUNCS[first_lang]
 
     # Print program lists
     for lang in LANGUAGE_TEMPLATES.keys():
         lang_file = open(LANGUAGE_TEMPLATES[lang], 'r')
         lines = [line.rstrip("\n") for line in lang_file.readlines()]
-        quine += list_format_func("%s_prog" % lang, lines)
+        quine += python_prog.format_list("%s_prog" % lang, lines, first_lang)
+        quine += "\n"
         lang_file.close()
 
-    # Print language array
-    quine += list_format_func("languages", languages[1:] + [languages[0]])
+    # Print language sequence list
+    quine += python_prog.format_list("languages", languages[1:] + [languages[0]], first_lang)
+    quine += "\n"
 
     # Print the actual program
     first_lang_file = open(LANGUAGE_TEMPLATES[first_lang], 'r')
